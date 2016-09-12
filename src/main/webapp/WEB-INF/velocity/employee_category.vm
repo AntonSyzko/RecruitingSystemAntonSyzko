@@ -1,0 +1,400 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <title>RecruitingSystem</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/theme.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/ie-emulation-modes-warning.js"></script>
+    <script src="/js/j_script.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/jquery-2.1.1.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <script src="/js/jquery.tmpl.js"></script>
+    <script src="/js/jquery-1.4.3.js"></script>
+    <style type="text/css">
+        #content {
+            width: 500px;
+            margin: 0 auto 50px;
+        }
+
+        .footer {
+            bottom: 0;
+            padding: 10px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body role="document">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-collapse collapse" style="width: 100%">
+            <ul class="nav navbar-nav">
+                <a class="navbar-brand" href="/"><span
+                        style="color: #ffffff;font-size: 18px"><strong>RecruitingSystem</strong></span></a>
+                <li><a href="/"><b>Employees</b></a></li>
+                <li><a href="/department/list.html"><b>Departments</b></a></li>
+                #if(!${authz.allGranted("ROLE_ADMIN")})
+                    <li><a href="/editor/login.html"><b>Login</b></a></li>
+                #end
+                #if(${authz.allGranted("ROLE_ADMIN")})
+                    <li><a href="/employee/add.html"><b>Add employee</b></a></li>
+                #end
+                #if(${authz.allGranted("ROLE_ADMIN")})
+                    <li><a href="/department/add.html"><b>Add department</b></a></li>
+                #end
+                #if(${authz.allGranted("ROLE_ADMIN")})
+                    <li><a href="/editor/registration.html"><b>Registration</b></a></li>
+                #end
+                #if(${authz.allGranted("ROLE_ADMIN")})
+                    <li><a href="/logout.html"><b>Logout</b></a></li>
+                #end
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-fixed-top"
+         style="border-radius:6px;width: 200px;height:50px;margin:0 0 0 0;float:right">
+        <table align=center style="height: 100%">
+            <tr style="height: 100%">
+                <td align=center valign=center>
+                    <strong><span style="font-size:26px"><span
+                            style="color:rgb(0, 254, 255)">IonIdea</span></span></strong>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="center-block" style=";width:80%;height: 100%">
+<div style="margin: 70px 36% 15px;width: 400px;height: 30px">
+    <form method="get" action="/employee/search.html">
+        <input placeholder="Search Employee"
+               style="border-radius:6px;border:2px solid #00b958;height:33px;width: 400px " type="text"
+               name="searchInput"/>
+    </form>
+</div>
+<table class="table table-striped center-block">
+    <thead>
+    <tr>
+        #if($sortingCriteria == 'id')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">Id</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=id&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=id&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">Id</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=id&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=id&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'last_name')
+        <th><span style="color:rgba(255, 0, 0, 0.60)">Last name</span>&nbsp;&nbsp;
+            #if($desc == 'asc')
+                <span style="font-size:14px">&uarr;</span>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=last_name&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+            #else
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=last_name&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <span style="font-size:14px">&darr;</span>
+            #end
+        #else
+            <th><span style="color:#008080">Last name</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=last_name&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=last_name&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'first_name')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">First name</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=first_name&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=first_name&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">First name</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=first_name&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=first_name&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'department')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">Department name</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=department&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=department&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">Department name</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=department&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=department&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'recruited_date')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">Recruited date</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=recruited_date&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=recruited_date&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">Recruited date</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=recruited_date&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=recruited_date&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'salary')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">Salary</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=salary&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=salary&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">Salary</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=salary&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=salary&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+        #if($sortingCriteria == 'working')
+            <th><span style="color:rgba(255, 0, 0, 0.60)">Working</span>&nbsp;&nbsp;
+                #if($desc == 'asc')
+                    <span style="font-size:14px">&uarr;</span>&nbsp;
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=working&desc=desc"><span
+                            style="font-size:14px">&darr;</span></a>
+                #else
+                    <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=working&desc=asc"><span
+                            style="font-size:14px">&uarr;</span></a>&nbsp;
+                    <span style="font-size:14px">&darr;</span>
+                #end
+            </th>
+        #else
+            <th><span style="color:#008080">Working</span>&nbsp;&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=working&desc=asc"><span
+                        style="font-size:14px">&uarr;</span></a>&nbsp;
+                <a href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&sortingCriteria=working&desc=desc"><span
+                        style="font-size:14px">&darr;</span></a>
+            </th>
+        #end
+    </tr>
+    </thead>
+    #foreach($employee in $employee_list)
+        <tr>
+            <td>
+                <span style="font-size:14px"><strong>${employee.id}</strong></span>
+            </td>
+            <td>
+                <span style="font-size:14px"><strong>${employee.last_name}</strong></span>
+            </td>
+            <td>
+                <span style="font-size:14px"><strong>${employee.first_name}</strong></span>
+            </td>
+            <td>
+                <a href="/employee/category.html?categoryName=department&categoryValue=${employee.department.department_name}"><span
+                        style="font-size:14px"><strong>${employee.department.department_name}</strong></span></a>
+            </td>
+            <td>
+                <a href="/employee/category.html?categoryName=recruited_date&categoryValue=${employee.recruited_date}"><span
+                        style="font-size:14px"><strong>${employee.recruited_date}</strong></span></a>
+            </td>
+            <td>
+                <span style="color:#00b958;font-size:14px"><strong>$&nbsp;
+                    <script>document.write((${employee.salary}).toFixed(2).replace(/(\d)(?=(\d{3})+\b)/g, '$1 '));</script>
+                </strong></span>
+            </td>
+            <td>
+                #if($employee.is_active)
+                    <span style="color:#00b958;font-size:14px"><strong>Yes</strong></span>
+                #end
+                #if(!$employee.is_active)
+                    <span style="color: red;font-size:medium"><strong>No</strong></span>
+                #end
+            </td>
+        </tr>
+    #end
+</table>
+<div class="center-block footer">
+    <table class="center-block">
+        <tr>
+            <td>
+                #if($count > 1&&$currentPage<=5)
+                    #if($currentPage ==1)
+                        <button type="button" style="width: 40px;height: 32px" class="btn btn-default"><b>1</b>
+                        </button>
+                        &nbsp;&nbsp;
+                    #end
+                    #if($currentPage !=1&&$currentPage<=10)
+                        <button type="button" style="width: 40px;height: 32px" class="btn btn-default"><a
+                                href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&countPages=1&sortingCriteria=$sortingCriteria&desc=$desc"><b>1</b></a>
+                        </button>
+                        &nbsp;&nbsp;
+                    #end
+                #end
+            </td>
+            #if($count>=2)
+                #if($currentPage==1&&$count<=10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage==2&&$count<=10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage==3&&$count<=10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage==4&&$count<=10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage==5&&$count<=10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage==6&&$count<10)
+                    #set($start = 1)
+                #else
+                    #set($start = 2)
+                #end
+                #if($currentPage>6)
+                    #set($start = $currentPage - 4)
+                #end
+
+                #if($count>10)
+                    #if(($currentPage < ($count - 4))&&($currentPage >= 5))
+                        #set($end = 4 +  $currentPage  )
+                    #end
+                    #if(($currentPage < ($count - 4))&&($currentPage <= 5)&&($count>=10))
+                        #set($end = 9)
+                    #end
+                    #if($currentPage >= ($count - 4))
+                        #set($end = $count)
+                    #end
+                    #if($currentPage >= ($count - 5))
+                        #set($end = $count-1)
+                    #end
+                    #if($currentPage >= ($count - 3))
+                        #set($end = $count)
+                        #set($start = $currentPage - 5)
+                    #end
+                    #if($currentPage >= ($count - 3))
+                        #set($end = $count-1)
+                        #set($start = $currentPage - 5)
+                    #end
+                    #if($currentPage >= ($count - 2))
+                        #set($end = $count)
+                        #set($start = $currentPage - 6)
+                    #end
+                    #if($currentPage >= ($count - 2))
+                        #set($end = $count-1)
+                        #set($start = $currentPage - 6)
+                    #end
+                    #if($currentPage >= ($count - 1))
+                        #set($end = $count)
+                        #set($start = $currentPage - 7)
+                    #end
+                    #if($currentPage >= ($count - 1))
+                        #set($end = $count-1)
+                        #set($start = $currentPage - 7)
+                    #end
+                    #if($currentPage >= $count)
+                        #set($end = $count)
+                        #set($start = $currentPage - 8)
+                    #end
+                    #if($currentPage >= $count)
+                        #set($end = $count-1)
+                        #set($start = $currentPage - 8)
+                    #end
+                    #if($count == 6)
+                        #set($end = 6)
+                    #end
+                    #if($count == 7)
+                        #set($end = 7)
+                        #set($start = 1)
+                    #end
+                    #if($count == 8)
+                        #set($end = 8)
+                        #set($start = 1)
+                    #end
+                    #if($count == 9)
+                        #set($end = 9)
+                        #set($start = 1)
+                    #end
+                #else
+                    #set($end = $count)
+                #end
+                #set($range = [$start..$end])
+                #foreach($i in $range)
+                    #if($currentPage == $i&&$currentPage!=1)
+                        <td>
+                            <button type="button" style="width: 40px;height: 32px" class="btn btn-default">
+                                <b>$i</b>
+                            </button>
+                            &nbsp;&nbsp;
+                        </td>
+                    #end
+                    #if($currentPage != $i)
+                        <td>
+                            <button type="button" style="width: 40px;height: 32px" class="btn btn-default"><a
+                                    href="/employee/category.html?categoryName=$categoryName&categoryValue=$categoryValue&countPages=$i&sortingCriteria=$sortingCriteria&desc=$desc"><b>$i</b></a>
+                            </button>
+                            &nbsp;&nbsp;
+                        </td>
+                    #end
+                #end
+            #end
+        </tr>
+    </table>
+</div>
+</div>
+</body>
+</html>
